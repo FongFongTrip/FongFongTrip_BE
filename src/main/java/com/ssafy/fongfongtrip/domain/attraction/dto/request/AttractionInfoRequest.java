@@ -8,12 +8,4 @@ import lombok.Builder;
 public record AttractionInfoRequest(@NotNull Integer contentTypeId,
                                     @NotNull Integer sidoCode,
                                     @NotNull Integer gugunCode) {
-
-    public static AttractionInfoRequest of(AttractionInfo attractionInfo) {
-        return AttractionInfoRequest.builder()
-                .contentTypeId(attractionInfo.getContentTypeId())
-                .sidoCode(attractionInfo.getSidoCode())
-                .gugunCode(attractionInfo.getGugunCode())
-                .build();
-    }
 }
