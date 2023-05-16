@@ -20,4 +20,9 @@ public class AttractionMark {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    public AttractionMark(AttractionInfo attractionInfo, Member member) {
+        this.attractionInfo = attractionInfo;
+        this.member = member;
+    }
 }

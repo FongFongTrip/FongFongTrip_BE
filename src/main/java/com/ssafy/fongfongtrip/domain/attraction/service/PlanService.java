@@ -11,10 +11,12 @@ import com.ssafy.fongfongtrip.domain.member.repository.MemberRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class PlanService {
 
@@ -23,6 +25,7 @@ public class PlanService {
     private final AttractionInfoRepository attractionInfoRepository;
     private final MemberRepository memberRepository;
 
+    @Transactional
     public Plan save(PlanRequest planRequest, Long memberId) {
         Plan plan = planRepository.save(new Plan(memberRepository.findById(memberId).orElseThrow(EntityNotFoundException::new)));
 
@@ -50,6 +53,7 @@ public class PlanService {
         return routeRepository.findRoutesByPlanId(planId);
     }
 
+    @Transactional
     public void deletePlanByPlanId(Long planId) {
         planRepository.deletePlanById(planId);
     }
