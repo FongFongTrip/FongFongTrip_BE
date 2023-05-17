@@ -3,13 +3,14 @@ package com.ssafy.fongfongtrip.domain.attraction.entity;
 
 import com.ssafy.fongfongtrip.domain.member.entity.Member;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AttractionMark {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)

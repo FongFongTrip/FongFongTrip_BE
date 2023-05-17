@@ -13,8 +13,14 @@ import java.util.Optional;
 
 public interface AttractionInfoRepository extends JpaRepository<AttractionInfo, Integer> {
 
-    Page<AttractionInfo> findByPaging(Pageable pageable);
-    Page<AttractionInfo> findPagingByContentTypeId(Pageable pageable);
+    @Query(value = "select ai from AttractionInfo ai",
+            countQuery = "select count(ai) from AttractionInfo ai")
+    Page<AttractionInfo> findPagingAll(Pageable pageable);
+
+    @Query(value = "select ai from AttractionInfo ai where ai.contentTypeId = :contentTypeId",
+            countQuery = "select count(ai) from AttractionInfo ai")
+    Page<AttractionInfo> findPagingByContentTypeId(Pageable pageable, @Param("contentTypeId") Integer contentTypeId);
+
 
     @Query("select ai from AttractionInfo ai " +
             "where ai.contentTypeId = :contentTypeId " +

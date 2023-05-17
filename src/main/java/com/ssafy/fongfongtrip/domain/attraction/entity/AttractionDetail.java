@@ -6,12 +6,9 @@ import lombok.Getter;
 
 @Getter
 @Entity
-public class AttractionDetail {
+@DiscriminatorValue("Detail")
+public class AttractionDetail extends AttractionInfo {
 
-    @Id
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "content_id", nullable = false)
-    private AttractionInfo attractionInfo;
     private String cat1;
     private String cat2;
     private String cat3;

@@ -7,12 +7,9 @@ import lombok.Getter;
 
 @Getter
 @Entity
-public class AttractionDescription {
+@DiscriminatorValue("Description")
+public class AttractionDescription extends AttractionInfo {
 
-    @Id
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "content_id", nullable = false)
-    private AttractionInfo attractionInfo;
     private String homepage;
     private String overview;
     private String telname;

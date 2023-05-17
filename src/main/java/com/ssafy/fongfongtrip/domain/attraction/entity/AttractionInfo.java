@@ -1,11 +1,15 @@
 package com.ssafy.fongfongtrip.domain.attraction.entity;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AttractionInfo {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

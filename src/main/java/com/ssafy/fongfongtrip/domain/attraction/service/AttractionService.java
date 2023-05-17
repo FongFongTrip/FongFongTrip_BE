@@ -33,12 +33,12 @@ public class AttractionService {
         return attractionInfoRepository.findAll();
     }
 
-    public Page<AttractionInfo> findBy(Pageable pageable) {
-        return attractionInfoRepository.findByPaging(pageable);
+    public Page<AttractionInfo> findByPaging(Pageable pageable) {
+        return attractionInfoRepository.findPagingAll(pageable);
     }
 
-    public Page<AttractionInfo> findPagingByContentTypeId(Pageable pageable) {
-        return attractionInfoRepository.findPagingByContentTypeId(pageable);
+    public Page<AttractionInfo> findPagingByContentTypeId(Pageable pageable, Integer contentTypeId) {
+        return attractionInfoRepository.findPagingByContentTypeId(pageable, contentTypeId);
     }
 
     public List<AttractionInfo> findAllByCode(AttractionInfoRequest attractionInfoRequest) {

@@ -1,7 +1,6 @@
 package com.ssafy.fongfongtrip.domain.attraction.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,7 +11,9 @@ public class Route {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-    private Long order;
+
+    @Column(nullable = false)
+    private Long routeOrder;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "content_id")
@@ -22,8 +23,8 @@ public class Route {
     @JoinColumn(name = "plan_id")
     private Plan plan;
 
-    public Route(Long order, AttractionInfo attractionInfo, Plan plan) {
-        this.order = order;
+    public Route(Long routeOrder, AttractionInfo attractionInfo, Plan plan) {
+        this.routeOrder = routeOrder;
         this.attractionInfo = attractionInfo;
         this.plan = plan;
     }

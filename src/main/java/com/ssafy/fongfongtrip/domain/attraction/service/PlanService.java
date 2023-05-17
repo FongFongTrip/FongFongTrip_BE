@@ -49,8 +49,8 @@ public class PlanService {
         return planRepository.findByMemberId(memberId);
     }
 
-    public List<Route> findRoutesByPlanId(Long planId) {
-        return routeRepository.findRoutesByPlanId(planId);
+    public List<Route> findRoutesByPlanId(Plan plan) {
+        return routeRepository.findRoutesByPlan(plan);
     }
 
     @Transactional
