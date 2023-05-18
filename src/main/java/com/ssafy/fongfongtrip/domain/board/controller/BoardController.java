@@ -2,12 +2,12 @@ package com.ssafy.fongfongtrip.domain.board.controller;
 
 import com.ssafy.fongfongtrip.config.security.LoginUser;
 import com.ssafy.fongfongtrip.domain.board.dto.request.BoardRegisterRequest;
+import com.ssafy.fongfongtrip.domain.board.dto.request.BoardSearchRequest;
 import com.ssafy.fongfongtrip.domain.board.dto.request.BoardUpdateRequest;
 import com.ssafy.fongfongtrip.domain.board.dto.response.BoardResponse;
 import com.ssafy.fongfongtrip.domain.board.dto.response.SimpleBoardResponse;
 import com.ssafy.fongfongtrip.domain.board.entity.Board;
 import com.ssafy.fongfongtrip.domain.board.service.BoardService;
-import com.ssafy.fongfongtrip.domain.member.service.MemberService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/boards")
@@ -29,12 +28,21 @@ import java.util.stream.Collectors;
 public class BoardController {
 
     private final BoardService boardService;
-    private final MemberService memberService;
 
     @GetMapping
     public ResponseEntity<List<SimpleBoardResponse>> boardList(@PageableDefault(page = 0, size = 20, sort = "created", direction = Sort.Direction.DESC) Pageable pageable,
                                                                @AuthenticationPrincipal LoginUser loginUser) {
         Page<Board> paging = boardService.findPaging(pageable);
+        return ResponseEntity.ok(paging.stream()
+                .map(board -> SimpleBoardResponse.of(board, isWriter(board, loginUser)))
+                .toList());
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<SimpleBoardResponse>> searchList(@RequestBody @Validated BoardSearchRequest boardSearchRequest,
+                                                                @PageableDefault(page = 0, size = 20, sort = "created", direction = Sort.Direction.DESC) Pageable pageable,
+                                                                @AuthenticationPrincipal LoginUser loginUser) {
+        Page<Board> paging = boardService.findByKeyword(boardSearchRequest, pageable);
         return ResponseEntity.ok(paging.stream()
                 .map(board -> SimpleBoardResponse.of(board, isWriter(board, loginUser)))
                 .toList());

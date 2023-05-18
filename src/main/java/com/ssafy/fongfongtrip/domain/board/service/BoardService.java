@@ -1,6 +1,7 @@
 package com.ssafy.fongfongtrip.domain.board.service;
 
 import com.ssafy.fongfongtrip.domain.board.dto.request.BoardRegisterRequest;
+import com.ssafy.fongfongtrip.domain.board.dto.request.BoardSearchRequest;
 import com.ssafy.fongfongtrip.domain.board.dto.request.BoardUpdateRequest;
 import com.ssafy.fongfongtrip.domain.board.entity.Board;
 import com.ssafy.fongfongtrip.domain.board.repository.BoardRepository;
@@ -10,8 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +25,19 @@ public class BoardService {
 
     public Page<Board> findPaging(Pageable pageable) {
         return boardRepository.findPaging(pageable);
+    }
+
+    public Page<Board> findByKeyword(BoardSearchRequest boardSearchRequest, Pageable pageable) {
+        if(boardSearchRequest.category().equals("title")){
+            return boardRepository.findPagingByTitle(pageable, boardSearchRequest.keyword());
+        }
+        if(boardSearchRequest.category().equals("content")){
+            return boardRepository.findPagingByContent(pageable, boardSearchRequest.keyword());
+        }
+        if(boardSearchRequest.category().equals("memberId")){
+            return boardRepository.findPagingByMemberId(pageable, boardSearchRequest.keyword());
+        }
+        throw new EntityNotFoundException();
     }
 
     public Board findById(Long boardId) {
