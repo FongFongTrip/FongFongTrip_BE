@@ -7,11 +7,13 @@ import com.ssafy.fongfongtrip.domain.member.service.MemberService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ChatRoomService {
     private final ChatRoomRepository chatRoomRepository;
@@ -25,10 +27,12 @@ public class ChatRoomService {
         return chatRoomRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
+    @Transactional
     public ChatRoom createRoom(ChatRoomCreateRequest chatRoomCreateRequest, Long creatorId) {
         return chatRoomRepository.save(chatRoomCreateRequest.toChatRoom(memberService.findById(creatorId)));
     }
 
+    @Transactional
     public void deleteRoom(Long roomId, Long memberId) {
         chatRoomRepository.deleteByIdAndMemberId(roomId, memberId);
     }

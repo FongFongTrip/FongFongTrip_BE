@@ -44,4 +44,10 @@ public class Comment extends BaseTime {
         this.member = member;
         this.parent = parent;
     }
+
+    public void initParentCommentGroupNum(Long groupNum) {
+        if (this.groupNum == null) {
+            this.groupNum = groupNum;
+        }
+    }
 }

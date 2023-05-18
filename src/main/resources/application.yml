@@ -6,7 +6,7 @@ spring:
 #    hibernate:
 #      ddl-auto: create
     show-sql: true
-    open-in-view: false
+    open-in-view: true
     properties:
       hibernate:
         format_sql: true
@@ -41,6 +41,6 @@ jwt:
 
 client:
   host: localhost
-  url: http://localhost:3000
-  #  url: http://70.12.50.219:3000
+#  url: http://localhost:3000
+  url: http://70.12.50.219:3000
   endpoint: /success

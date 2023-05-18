@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface BoardRepository extends JpaRepository<Board, Long> {
 
-    @Query(value = "select b from Board b order by b.created desc ",
+    @Query(value = "select b from Board b order by b.isNotice desc , b.created desc ",
             countQuery = "select count(b) from Board b")
     Page<Board> findPaging(Pageable pageable);
 

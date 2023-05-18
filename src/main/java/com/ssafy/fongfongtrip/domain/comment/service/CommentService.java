@@ -21,7 +21,7 @@ public class CommentService {
     private final MemberService memberService;
 
     public List<Comment> findCommentsByBoardId(Long boardId) {
-        return commentRepository.findCommentsByBoardId(boardId);
+        return commentRepository.findCommentsByBoardIdOrderByGroupNumAscCreatedAsc(boardId);
     }
 
     public Comment findById(Long id) {
@@ -30,10 +30,20 @@ public class CommentService {
 
     @Transactional
     public Comment save(Long boardId, Long memberId, CommentRegisterRequest commentRegisterRequest) {
-        return commentRepository.save(commentRegisterRequest.toComment(
+        Comment comment = commentRepository.save(commentRegisterRequest.toComment(
                 boardService.findById(boardId),
                 memberService.findById(memberId),
-                commentRepository.findById(commentRegisterRequest.parentId()).orElse(null)));
+                getParent(commentRegisterRequest)));
+        comment.initParentCommentGroupNum(comment.getId());
+        return comment;
+    }
+
+    private Comment getParent(CommentRegisterRequest commentRegisterRequest) {
+        Comment parent = null;
+        if (commentRegisterRequest.parentId() != null) {
+            parent = commentRepository.findById(commentRegisterRequest.parentId()).orElse(null);
+        }
+        return parent;
     }
 
     @Transactional

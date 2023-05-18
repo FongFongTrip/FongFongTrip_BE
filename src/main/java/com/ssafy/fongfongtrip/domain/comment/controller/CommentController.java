@@ -28,7 +28,7 @@ public class CommentController {
                                                              @AuthenticationPrincipal LoginUser loginUser) {
         return ResponseEntity.ok(commentService.findCommentsByBoardId(boardId).stream()
                 .map(comment -> CommentResponse.of(comment, isWriter(comment.getMember().getId(), loginUser)))
-                .collect(Collectors.toList()));
+                .toList());
     }
 
     @PostMapping
