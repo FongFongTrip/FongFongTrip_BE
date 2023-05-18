@@ -43,7 +43,7 @@ public class SecurityConfig {
                         requests ->
                                 requests.requestMatchers("/auth2/**", "/api/v1/auth", "/api/v1/member/signup", "/api/v1/member/login",
                                                 "/ws", "/topic/**", "/pub/**", "/chat/**").permitAll()
-                                        .requestMatchers("/api/**").hasRole("USER")
+                                        .requestMatchers("/api/**").hasAnyRole("USER", "ADMIN")
                                         .anyRequest().authenticated())
                 .oauth2Login(setOAuth2Config())
                 .sessionManagement(config -> config.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

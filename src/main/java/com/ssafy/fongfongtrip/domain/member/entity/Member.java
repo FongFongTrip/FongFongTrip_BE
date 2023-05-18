@@ -1,5 +1,6 @@
 package com.ssafy.fongfongtrip.domain.member.entity;
 
+import com.ssafy.fongfongtrip.config.security.oauth.mapper.AuthProvider;
 import com.ssafy.fongfongtrip.global.audit.BaseTime;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -49,6 +50,16 @@ public class Member extends BaseTime {
     }
 
     public Member(String loginId, String password, String nickname, String email, String phone) {
+        this.loginId = loginId;
+        this.password = password;
+        this.nickname = nickname;
+        this.email = email;
+        this.phone = phone;
+    }
+
+    public Member(Long id, String accountId, AuthProvider authProvider, String loginId, String password, String nickname, String email, String phone) {
+        this.id = id;
+        this.oauth2 = new Oauth2(authProvider, accountId);
         this.loginId = loginId;
         this.password = password;
         this.nickname = nickname;

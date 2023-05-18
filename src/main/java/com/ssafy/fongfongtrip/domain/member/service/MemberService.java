@@ -4,6 +4,8 @@ import com.ssafy.fongfongtrip.domain.member.entity.Member;
 import com.ssafy.fongfongtrip.domain.member.repository.MemberRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,5 +19,9 @@ public class MemberService {
 
     public void deleteById(Long id) {
         memberRepository.deleteById(id);
+    }
+
+    public Page<Member> findPaging(Pageable pageable) {
+        return memberRepository.findPaging(pageable);
     }
 }
