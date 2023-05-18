@@ -2,6 +2,7 @@ package com.ssafy.fongfongtrip.domain.board.controller;
 
 import com.ssafy.fongfongtrip.config.security.LoginUser;
 import com.ssafy.fongfongtrip.domain.board.dto.request.BoardRegisterRequest;
+import com.ssafy.fongfongtrip.domain.board.dto.request.BoardSearchRequest;
 import com.ssafy.fongfongtrip.domain.board.dto.request.BoardUpdateRequest;
 import com.ssafy.fongfongtrip.domain.board.dto.response.BoardResponse;
 import com.ssafy.fongfongtrip.domain.board.dto.response.SimpleBoardResponse;
@@ -35,6 +36,16 @@ public class BoardController {
     public ResponseEntity<List<SimpleBoardResponse>> boardList(@PageableDefault(page = 0, size = 20, sort = "created", direction = Sort.Direction.DESC) Pageable pageable,
                                                                @AuthenticationPrincipal LoginUser loginUser) {
         Page<Board> paging = boardService.findPaging(pageable);
+        return ResponseEntity.ok(paging.stream()
+                .map(board -> SimpleBoardResponse.of(board, isWriter(board, loginUser)))
+                .toList());
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<SimpleBoardResponse>> searchList(@RequestBody @Validated BoardSearchRequest boardSearchRequest,
+                                                                @PageableDefault(page = 0, size = 20, sort = "created", direction = Sort.Direction.DESC) Pageable pageable,
+                                                                @AuthenticationPrincipal LoginUser loginUser) {
+        Page<Board> paging = boardService.findByKeyword(boardSearchRequest, pageable);
         return ResponseEntity.ok(paging.stream()
                 .map(board -> SimpleBoardResponse.of(board, isWriter(board, loginUser)))
                 .toList());
