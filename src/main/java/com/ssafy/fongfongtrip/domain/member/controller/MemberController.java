@@ -7,13 +7,22 @@ import com.ssafy.fongfongtrip.domain.member.dto.request.MemberLoginRequest;
 import com.ssafy.fongfongtrip.domain.member.dto.request.MemberRegisterRequest;
 import com.ssafy.fongfongtrip.domain.member.dto.response.AuthResponse;
 import com.ssafy.fongfongtrip.domain.member.dto.response.MemberResponse;
+import com.ssafy.fongfongtrip.domain.member.dto.response.SimpleMemberResponse;
+import com.ssafy.fongfongtrip.domain.member.entity.Member;
 import com.ssafy.fongfongtrip.domain.member.service.MemberDetailsService;
 import com.ssafy.fongfongtrip.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -48,5 +57,13 @@ public class MemberController {
     public ResponseEntity<Object> memberDelete(@PathVariable Long memberId) {
         memberService.deleteById(memberId);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/memberList")
+    public ResponseEntity<List<SimpleMemberResponse>> memberList(@PageableDefault(page = 0, size = 20, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<Member> paging = memberService.findPaging(pageable);
+        return ResponseEntity.ok(paging.stream()
+                .map(SimpleMemberResponse::of)
+                .collect(Collectors.toList()));
     }
 }
