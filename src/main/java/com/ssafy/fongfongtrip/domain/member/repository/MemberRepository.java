@@ -14,6 +14,8 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     Optional<Member> findByLoginId(String loginId);
 
+    Boolean existsByLoginId(String loginId);
+
     @Query(value = "select m from Member m order by m.id desc ",
             countQuery = "select count(m) from Member m")
     Page<Member> findPaging(Pageable pageable);

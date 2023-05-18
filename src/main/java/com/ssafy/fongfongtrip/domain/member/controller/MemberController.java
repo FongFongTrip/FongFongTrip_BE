@@ -5,6 +5,7 @@ import com.ssafy.fongfongtrip.config.security.jwt.JwtProvider;
 import com.ssafy.fongfongtrip.config.security.oauth.mapper.LoginUserMapper;
 import com.ssafy.fongfongtrip.domain.member.dto.request.MemberLoginRequest;
 import com.ssafy.fongfongtrip.domain.member.dto.request.MemberRegisterRequest;
+import com.ssafy.fongfongtrip.domain.member.dto.request.SignupCheckRequest;
 import com.ssafy.fongfongtrip.domain.member.dto.response.AuthResponse;
 import com.ssafy.fongfongtrip.domain.member.dto.response.MemberResponse;
 import com.ssafy.fongfongtrip.domain.member.dto.response.SimpleMemberResponse;
@@ -41,6 +42,11 @@ public class MemberController {
     @GetMapping("/{memberId}")
     public ResponseEntity<MemberResponse> memberDetails(@PathVariable Long memberId) {
         return ResponseEntity.ok(MemberResponse.of(memberService.findById(memberId)));
+    }
+
+    @PostMapping
+    public ResponseEntity<Boolean> memberDetailsByLoginId(@RequestBody @Validated SignupCheckRequest signupCheckRequest) {
+        return ResponseEntity.ok(memberService.checkLoginIdDuplication(signupCheckRequest));
     }
 
     @PostMapping("/login")

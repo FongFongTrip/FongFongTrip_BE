@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -41,7 +42,9 @@ public class SecurityConfig {
                 .and()
                 .authorizeHttpRequests(
                         requests ->
-                                requests.requestMatchers("/auth2/**", "/api/v1/auth", "/api/v1/member/signup", "/api/v1/member/login",
+                                requests.requestMatchers(HttpMethod.GET, "/api/v1/members/me").hasRole("USER")
+                                        .requestMatchers(HttpMethod.DELETE, "/api/v1/members/*").hasRole("ADMIN")
+                                        .requestMatchers("/auth2/**", "/api/v1/auth", "/api/v1/members/*", "/api/v1/members",
                                                 "/ws", "/topic/**", "/pub/**", "/chat/**").permitAll()
                                         .requestMatchers("/api/**").hasAnyRole("USER", "ADMIN")
                                         .anyRequest().authenticated())
