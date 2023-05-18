@@ -38,7 +38,7 @@ public class BoardController {
                 .toList());
     }
 
-    @GetMapping("/search")
+    @PostMapping("/search")
     public ResponseEntity<List<SimpleBoardResponse>> searchList(@RequestBody @Validated BoardSearchRequest boardSearchRequest,
                                                                 @PageableDefault(page = 0, size = 20, sort = "created", direction = Sort.Direction.DESC) Pageable pageable,
                                                                 @AuthenticationPrincipal LoginUser loginUser) {

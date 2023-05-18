@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface BoardRepository extends JpaRepository<Board, Long> {
 
-    @Query(value = "select b from Board b order by b.isNotice desc , b.created desc ",
+    @Query(value = "select b from Board b order by b.isNotice desc, b.created desc ",
             countQuery = "select count(b) from Board b")
     Page<Board> findPaging(Pageable pageable);
 

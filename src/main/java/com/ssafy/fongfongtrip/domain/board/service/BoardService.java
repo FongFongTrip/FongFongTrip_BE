@@ -4,6 +4,7 @@ import com.ssafy.fongfongtrip.domain.board.dto.request.BoardRegisterRequest;
 import com.ssafy.fongfongtrip.domain.board.dto.request.BoardSearchRequest;
 import com.ssafy.fongfongtrip.domain.board.dto.request.BoardUpdateRequest;
 import com.ssafy.fongfongtrip.domain.board.entity.Board;
+import com.ssafy.fongfongtrip.domain.board.entity.SearchType;
 import com.ssafy.fongfongtrip.domain.board.repository.BoardRepository;
 import com.ssafy.fongfongtrip.domain.member.service.MemberService;
 import jakarta.persistence.EntityNotFoundException;
@@ -11,14 +12,19 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import static com.ssafy.fongfongtrip.domain.board.entity.SearchType.*;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class BoardService {
 
     private final BoardRepository boardRepository;
     private final MemberService memberService;
 
+    @Transactional
     public void save(BoardRegisterRequest boardRegisterRequest, Long memberId) {
         boardRepository.save(boardRegisterRequest.toBoard(memberService.findById(memberId)));
     }
@@ -28,13 +34,13 @@ public class BoardService {
     }
 
     public Page<Board> findByKeyword(BoardSearchRequest boardSearchRequest, Pageable pageable) {
-        if(boardSearchRequest.category().equals("title")){
+        if(boardSearchRequest.category().equals(TITLE.getValue())){
             return boardRepository.findPagingByTitle(pageable, boardSearchRequest.keyword());
         }
-        if(boardSearchRequest.category().equals("content")){
+        if(boardSearchRequest.category().equals(CONTENT.getValue())){
             return boardRepository.findPagingByContent(pageable, boardSearchRequest.keyword());
         }
-        if(boardSearchRequest.category().equals("memberId")){
+        if(boardSearchRequest.category().equals(MEMBER_NICKNAME.getValue())){
             return boardRepository.findPagingByMemberId(pageable, boardSearchRequest.keyword());
         }
         throw new EntityNotFoundException();
@@ -44,10 +50,12 @@ public class BoardService {
         return boardRepository.findById(boardId).orElseThrow(EntityNotFoundException::new);
     }
 
+    @Transactional
     public void deleteById(Long boardId, Long memberId) {
         boardRepository.deleteBoardByIdAndMemberId(boardId, memberId);
     }
 
+    @Transactional
     public void boardUpdate(BoardUpdateRequest boardUpdateRequest, Long boardId) {
         boardRepository.findById(boardId)
                 .ifPresentOrElse(board -> board.updateBoard(boardUpdateRequest.title(), boardUpdateRequest.content(), boardUpdateRequest.isNotice()),
