@@ -37,7 +37,7 @@ public class BoardController {
         Page<Board> paging = boardService.findPaging(pageable);
         return ResponseEntity.ok(paging.stream()
                 .map(board -> SimpleBoardResponse.of(board, isWriter(board, loginUser)))
-                .collect(Collectors.toList()));
+                .toList());
     }
 
     @GetMapping("/{boardId}")

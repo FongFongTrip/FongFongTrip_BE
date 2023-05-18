@@ -18,21 +18,22 @@ public class ChatRoom extends BaseTime {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 30)
     private String roomName;
 
     @Column(nullable = false)
-    private Boolean lock;
+    private Boolean locked;
 
+    @Column(length = 30)
     private String password;
 
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
 
-    public ChatRoom(String roomName, Boolean lock, String password, Member member) {
+    public ChatRoom(String roomName, Boolean locked, String password, Member member) {
         this.roomName = roomName;
-        this.lock = lock;
+        this.locked = locked;
         this.password = password;
         this.member = member;
     }

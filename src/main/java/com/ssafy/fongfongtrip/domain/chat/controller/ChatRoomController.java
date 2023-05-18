@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/room")
+@RequestMapping("/api/v1/rooms")
 public class ChatRoomController {
     private final ChatRoomService chatRoomService;
 
@@ -25,7 +25,7 @@ public class ChatRoomController {
     public ResponseEntity<List<ChatRoomResponse>> room(@AuthenticationPrincipal LoginUser loginUser) {
         return ResponseEntity.ok(chatRoomService.findAllRooms().stream()
                 .map(chatRoom -> ChatRoomResponse.of(chatRoom, isCreator(chatRoom.getMember().getId(), loginUser)))
-                .collect(Collectors.toList()));
+                .toList());
     }
 
     // 채팅방 생성

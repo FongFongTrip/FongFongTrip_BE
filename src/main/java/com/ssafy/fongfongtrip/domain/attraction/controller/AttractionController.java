@@ -33,7 +33,7 @@ public class AttractionController {
                         AttractionInfoResponse.of(attraction,
                                 attractionService.liked(attraction.getContentId(), loginUser.getMember().getId()),
                                 attractionService.marked(attraction.getContentId(), loginUser.getMember().getId())))
-                .collect(Collectors.toList()));
+                .toList());
     }
 
     @GetMapping("/contents/{contentTypeId}")
@@ -45,7 +45,7 @@ public class AttractionController {
                         AttractionInfoResponse.of(attraction,
                                 attractionService.liked(attraction.getContentId(), loginUser.getMember().getId()),
                                 attractionService.marked(attraction.getContentId(), loginUser.getMember().getId())))
-                .collect(Collectors.toList()));
+                .toList());
     }
 
 
@@ -57,7 +57,7 @@ public class AttractionController {
                         AttractionInfoResponse.of(attraction,
                                 attractionService.liked(attraction.getContentId(), loginUser.getMember().getId()),
                                 attractionService.marked(attraction.getContentId(), loginUser.getMember().getId())))
-                .collect(Collectors.toList()));
+                .toList());
     }
 
     @GetMapping("/{contentId}/like")

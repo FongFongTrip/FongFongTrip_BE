@@ -37,13 +37,9 @@ public class BoardService {
     }
 
     public void boardUpdate(BoardUpdateRequest boardUpdateRequest, Long boardId) {
-        Optional<Board> wrappedBoard = boardRepository.findById(boardId);
-        if (wrappedBoard.isPresent()) {
-            Board board = wrappedBoard.get();
-            board.updateBoard(boardUpdateRequest.title(), boardUpdateRequest.content(), boardUpdateRequest.isNotice());
-            return;
-        }
+        boardRepository.findById(boardId)
+                .ifPresentOrElse(board -> board.updateBoard(boardUpdateRequest.title(), boardUpdateRequest.content(), boardUpdateRequest.isNotice()),
+                () -> { throw new EntityNotFoundException(); });
 
-        throw new EntityNotFoundException();
     }
 }

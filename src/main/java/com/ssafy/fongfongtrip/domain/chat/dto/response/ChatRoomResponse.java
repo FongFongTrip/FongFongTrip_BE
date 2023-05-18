@@ -6,7 +6,7 @@ import lombok.Builder;
 @Builder
 public record ChatRoomResponse(Long id,
                                String roomName,
-                               Boolean lock,
+                               Boolean locked,
                                String password,
                                Boolean isCreator) {
 
@@ -14,7 +14,7 @@ public record ChatRoomResponse(Long id,
         return ChatRoomResponse.builder()
                 .id(chatRoom.getId())
                 .roomName(chatRoom.getRoomName())
-                .lock(chatRoom.getLock())
+                .locked(chatRoom.getLocked())
                 .password(chatRoom.getPassword())
                 .isCreator(isCreator)
                 .build();

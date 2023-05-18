@@ -28,7 +28,7 @@ public class PlanController {
     public ResponseEntity<List<PlanResponse>> planListByMemberId(@AuthenticationPrincipal LoginUser loginUser) {
         return ResponseEntity.ok(planService.findPlansByMemberId(loginUser.getMember().getId()).stream()
                 .map(plan -> new PlanResponse(plan.getId(), getRouteResponses(plan, loginUser.getMember().getId())))
-                .collect(Collectors.toList()));
+                .toList());
     }
 
     private List<RouteResponse> getRouteResponses(Plan plan, Long memberId) {
@@ -36,7 +36,7 @@ public class PlanController {
                 .map(route -> RouteResponse.of(route, AttractionInfoResponse.of(route.getAttractionInfo(),
                             attractionService.liked(route.getAttractionInfo().getContentId(), memberId),
                             attractionService.marked(route.getAttractionInfo().getContentId(), memberId))))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @PostMapping

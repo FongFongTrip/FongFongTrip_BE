@@ -24,13 +24,13 @@ public class AddressController {
     public ResponseEntity<List<SidoResponse>> sidoList() {
         return ResponseEntity.ok(addressService.findAllSidos().stream()
                 .map(SidoResponse::of)
-                .collect(Collectors.toList()));
+                .toList());
     }
 
     @GetMapping("/sido/{sidoCode}/gugun")
     public ResponseEntity<List<GugunResponse>> gugunList(@PathVariable Integer sidoCode) {
         return ResponseEntity.ok(addressService.findGugunBySidoCode(sidoCode).stream()
                 .map(GugunResponse::of)
-                .collect(Collectors.toList()));
+                .toList());
     }
 }

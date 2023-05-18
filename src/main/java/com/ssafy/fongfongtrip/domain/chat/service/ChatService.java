@@ -7,6 +7,8 @@ import com.ssafy.fongfongtrip.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ChatService {
@@ -18,5 +20,9 @@ public class ChatService {
         return chatRepository.save(chatRequest.toChat(
                 chatRoomService.findById(chatRequest.roomId()),
                 memberService.findById(chatRequest.memberId())));
+    }
+
+    public List<Chat> findByChatRoomId(Long chatRoomId) {
+        return chatRepository.findByChatRoomIdOrderByCreatedAsc(chatRoomId);
     }
 }
