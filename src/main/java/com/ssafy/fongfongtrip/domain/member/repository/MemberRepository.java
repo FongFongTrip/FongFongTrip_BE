@@ -1,6 +1,5 @@
 package com.ssafy.fongfongtrip.domain.member.repository;
 
-import com.ssafy.fongfongtrip.domain.board.entity.Board;
 import com.ssafy.fongfongtrip.domain.member.entity.Member;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

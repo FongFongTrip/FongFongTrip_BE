@@ -3,8 +3,6 @@ package com.ssafy.fongfongtrip.domain.member.controller;
 import com.ssafy.fongfongtrip.config.security.LoginUser;
 import com.ssafy.fongfongtrip.config.security.jwt.JwtProvider;
 import com.ssafy.fongfongtrip.config.security.oauth.mapper.LoginUserMapper;
-import com.ssafy.fongfongtrip.domain.board.dto.response.SimpleBoardResponse;
-import com.ssafy.fongfongtrip.domain.board.entity.Board;
 import com.ssafy.fongfongtrip.domain.member.dto.request.MemberLoginRequest;
 import com.ssafy.fongfongtrip.domain.member.dto.request.MemberRegisterRequest;
 import com.ssafy.fongfongtrip.domain.member.dto.response.AuthResponse;

@@ -2,10 +2,7 @@ package com.ssafy.fongfongtrip.domain.member.dto.response;
 
 import com.ssafy.fongfongtrip.config.security.oauth.mapper.AuthProvider;
 import com.ssafy.fongfongtrip.domain.member.entity.Member;
-import com.ssafy.fongfongtrip.domain.member.entity.Role;
 import lombok.Builder;
-
-import java.util.List;
 
 @Builder
 public record SimpleMemberResponse(Long id,
