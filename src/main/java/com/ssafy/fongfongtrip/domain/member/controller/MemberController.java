@@ -59,7 +59,7 @@ public class MemberController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping
+    @GetMapping("/memberList")
     public ResponseEntity<List<SimpleMemberResponse>> memberList(@PageableDefault(page = 0, size = 20, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<Member> paging = memberService.findPaging(pageable);
         return ResponseEntity.ok(paging.stream()
