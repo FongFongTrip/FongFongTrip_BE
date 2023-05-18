@@ -26,7 +26,7 @@ public class AttractionController {
     private final AttractionService attractionService;
 
     @GetMapping
-    public ResponseEntity<List<AttractionInfoResponse>> attractionListByPaging(@PageableDefault(page = 0, size = 20, sort = "title", direction = Sort.Direction.DESC) Pageable pageable,
+    public ResponseEntity<List<AttractionInfoResponse>> attractionListByPaging(@PageableDefault(page = 0, size = 20, sort = "title", direction = Sort.Direction.ASC) Pageable pageable,
                                                                                @AuthenticationPrincipal LoginUser loginUser) {
         return ResponseEntity.ok(attractionService.findByPaging(pageable).stream()
                 .map(attraction ->
@@ -38,7 +38,7 @@ public class AttractionController {
 
     @GetMapping("/contents/{contentTypeId}")
     public ResponseEntity<List<AttractionInfoResponse>> attractionListPagingByContentTypeId(@PathVariable Integer contentTypeId,
-                                                                                            @PageableDefault(page = 0, size = 20, sort = "title", direction = Sort.Direction.DESC) Pageable pageable,
+                                                                                            @PageableDefault(page = 0, size = 20, sort = "title", direction = Sort.Direction.ASC) Pageable pageable,
                                                                                             @AuthenticationPrincipal LoginUser loginUser) {
         return ResponseEntity.ok(attractionService.findPagingByContentTypeId(pageable, contentTypeId).stream()
                 .map(attraction ->
