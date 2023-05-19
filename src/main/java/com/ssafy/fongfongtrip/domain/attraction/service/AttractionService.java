@@ -9,6 +9,7 @@ import com.ssafy.fongfongtrip.domain.attraction.repository.AttractionLikeReposit
 import com.ssafy.fongfongtrip.domain.attraction.repository.AttractionMarkRepository;
 import com.ssafy.fongfongtrip.domain.member.entity.Member;
 import com.ssafy.fongfongtrip.domain.member.repository.MemberRepository;
+import com.ssafy.fongfongtrip.domain.member.service.MemberService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,7 +28,7 @@ public class AttractionService {
     private final AttractionInfoRepository attractionInfoRepository;
     private final AttractionLikeRepository attractionLikeRepository;
     private final AttractionMarkRepository attractionMarkRepository;
-    private final MemberRepository memberRepository;
+    private final MemberService memberService;
 
     public List<AttractionInfo> findAll() {
         return attractionInfoRepository.findAll();
@@ -60,14 +61,11 @@ public class AttractionService {
     }
 
     @Transactional
-    public AttractionLike like(Integer contentId, Long memberId) {
-        Optional<AttractionLike> attractionLike = attractionLikeRepository.findByAttractionInfoContentIdAndMemberId(contentId, memberId);
-        if (attractionLike.isPresent()) {
-            return attractionLike.get();
-        }
-        AttractionInfo attractionInfo = attractionInfoRepository.findByContentId(contentId).orElseThrow(EntityNotFoundException::new);
-        Member member = memberRepository.findById(memberId).orElseThrow(EntityNotFoundException::new);
-        return attractionLikeRepository.save(new AttractionLike(attractionInfo, member));
+    public void like(Integer contentId, Long memberId) {
+        attractionLikeRepository.findByAttractionInfoContentIdAndMemberId(contentId, memberId)
+                .orElseGet(() -> attractionLikeRepository.save(new AttractionLike(
+                        findByContentId(contentId),
+                        memberService.findById(memberId))));
     }
 
     @Transactional
@@ -76,14 +74,11 @@ public class AttractionService {
     }
 
     @Transactional
-    public AttractionMark mark(Integer contentId, Long memberId) {
-        Optional<AttractionMark> attractionMark = attractionMarkRepository.findByAttractionInfoContentIdAndMemberId(contentId, memberId);
-        if (attractionMark.isPresent()) {
-            return attractionMark.get();
-        }
-        AttractionInfo attractionInfo = attractionInfoRepository.findByContentId(contentId).orElseThrow(EntityNotFoundException::new);
-        Member member = memberRepository.findById(memberId).orElseThrow(EntityNotFoundException::new);
-        return attractionMarkRepository.save(new AttractionMark(attractionInfo, member));
+    public void mark(Integer contentId, Long memberId) {
+        attractionMarkRepository.findByAttractionInfoContentIdAndMemberId(contentId, memberId)
+                .orElseGet(() -> attractionMarkRepository.save(new AttractionMark(
+                        findByContentId(contentId),
+                        memberService.findById(memberId))));
     }
 
     @Transactional

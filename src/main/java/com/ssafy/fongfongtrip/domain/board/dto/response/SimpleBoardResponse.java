@@ -12,9 +12,11 @@ public record SimpleBoardResponse(Long id,
                                   LocalDateTime created,
                                   Boolean isNotice,
                                   String memberNickname,
-                                  Boolean isWriter) {
+                                  Boolean isWriter,
+                                  Boolean liked,
+                                  Boolean marked) {
 
-    public static SimpleBoardResponse of(Board board, Boolean isWriter) {
+    public static SimpleBoardResponse of(Board board, Boolean isWriter, Boolean liked, Boolean marked) {
         return SimpleBoardResponse.builder()
                 .id(board.getId())
                 .title(board.getTitle())
@@ -23,6 +25,8 @@ public record SimpleBoardResponse(Long id,
                 .isNotice(board.getIsNotice())
                 .memberNickname(board.getMember().getNickname())
                 .isWriter(isWriter)
+                .liked(liked)
+                .marked(marked)
                 .build();
     }
 }

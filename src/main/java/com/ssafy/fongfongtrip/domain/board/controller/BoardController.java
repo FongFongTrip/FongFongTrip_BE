@@ -1,6 +1,8 @@
 package com.ssafy.fongfongtrip.domain.board.controller;
 
 import com.ssafy.fongfongtrip.config.security.LoginUser;
+import com.ssafy.fongfongtrip.domain.attraction.dto.response.AttractionLikeResponse;
+import com.ssafy.fongfongtrip.domain.attraction.dto.response.AttractionMarkResponse;
 import com.ssafy.fongfongtrip.domain.board.dto.request.BoardRegisterRequest;
 import com.ssafy.fongfongtrip.domain.board.dto.request.BoardSearchRequest;
 import com.ssafy.fongfongtrip.domain.board.dto.request.BoardUpdateRequest;
@@ -34,7 +36,9 @@ public class BoardController {
                                                                @AuthenticationPrincipal LoginUser loginUser) {
         Page<Board> paging = boardService.findPaging(pageable);
         return ResponseEntity.ok(paging.stream()
-                .map(board -> SimpleBoardResponse.of(board, isWriter(board, loginUser)))
+                .map(board -> SimpleBoardResponse.of(board, isWriter(board, loginUser),
+                        boardService.liked(board.getId(), loginUser.getMember().getId()),
+                        boardService.marked(board.getId(), loginUser.getMember().getId())))
                 .toList());
     }
 
@@ -44,7 +48,9 @@ public class BoardController {
                                                                 @AuthenticationPrincipal LoginUser loginUser) {
         Page<Board> paging = boardService.findByKeyword(boardSearchRequest, pageable);
         return ResponseEntity.ok(paging.stream()
-                .map(board -> SimpleBoardResponse.of(board, isWriter(board, loginUser)))
+                .map(board -> SimpleBoardResponse.of(board, isWriter(board, loginUser),
+                        boardService.liked(board.getId(), loginUser.getMember().getId()),
+                        boardService.marked(board.getId(), loginUser.getMember().getId())))
                 .toList());
     }
 
@@ -71,6 +77,34 @@ public class BoardController {
                                                @AuthenticationPrincipal LoginUser loginUser) throws EntityNotFoundException {
         boardService.deleteById(boardId, loginUser.getMember().getId());
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{boardId}/like")
+    public ResponseEntity<AttractionLikeResponse> like(@PathVariable Long boardId,
+                                                       @AuthenticationPrincipal LoginUser loginUser) {
+        boardService.like(boardId, loginUser.getMember().getId());
+        return ResponseEntity.ok(new AttractionLikeResponse(true));
+    }
+
+    @DeleteMapping("/{boardId}/unlike")
+    public ResponseEntity<AttractionLikeResponse> unlike(@PathVariable Long boardId,
+                                                         @AuthenticationPrincipal LoginUser loginUser) {
+        boardService.unlike(boardId, loginUser.getMember().getId());
+        return ResponseEntity.ok(new AttractionLikeResponse(false));
+    }
+
+    @GetMapping("/{boardId}/mark")
+    public ResponseEntity<AttractionMarkResponse> mark(@PathVariable Long boardId,
+                                                       @AuthenticationPrincipal LoginUser loginUser) {
+        boardService.mark(boardId, loginUser.getMember().getId());
+        return ResponseEntity.ok(new AttractionMarkResponse(true));
+    }
+
+    @DeleteMapping("/{boardId}/unmark")
+    public ResponseEntity<AttractionMarkResponse> unmark(@PathVariable Long boardId,
+                                                         @AuthenticationPrincipal LoginUser loginUser) {
+        boardService.unmark(boardId, loginUser.getMember().getId());
+        return ResponseEntity.ok(new AttractionMarkResponse(false));
     }
 
     private Boolean isWriter(Board board, LoginUser loginUser) {
