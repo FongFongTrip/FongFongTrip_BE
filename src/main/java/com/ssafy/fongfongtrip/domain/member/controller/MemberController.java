@@ -59,9 +59,9 @@ public class MemberController {
         return ResponseEntity.ok(MemberResponse.of(memberDetailsService.signup(memberRegisterRequest)));
     }
 
-    @DeleteMapping("/{memberId}")
-    public ResponseEntity<Object> memberDelete(@PathVariable Long memberId) {
-        memberService.deleteById(memberId);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> memberDelete(@PathVariable Long id) {
+        memberService.deleteById(id);
         return ResponseEntity.ok().build();
     }
 

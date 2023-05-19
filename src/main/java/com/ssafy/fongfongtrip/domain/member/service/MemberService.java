@@ -9,10 +9,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
@@ -28,8 +30,13 @@ public class MemberService {
         return true;
     }
 
+    @Transactional
     public void deleteById(Long id) {
-        memberRepository.deleteById(id);
+        Optional<Member> member = memberRepository.findById(id);
+        if (member.isEmpty()) {
+            return;
+        }
+        memberRepository.delete(member.get());
     }
 
     public Page<Member> findPaging(Pageable pageable) {
