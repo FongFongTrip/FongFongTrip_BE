@@ -42,7 +42,7 @@ public class Member extends BaseTime {
         this.oauth2 = oauth2;
     }
 
-    public List<SimpleGrantedAuthority> getRole() {
+    public List<SimpleGrantedAuthority> getAuthorityRole() {
         return role.stream()
                 .map(Role::name)
                 .map(SimpleGrantedAuthority::new)

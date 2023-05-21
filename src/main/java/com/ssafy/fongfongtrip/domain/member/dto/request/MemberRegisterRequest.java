@@ -1,6 +1,7 @@
 package com.ssafy.fongfongtrip.domain.member.dto.request;
 
 import com.ssafy.fongfongtrip.domain.member.entity.Member;
+import com.ssafy.fongfongtrip.domain.member.entity.Role;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 

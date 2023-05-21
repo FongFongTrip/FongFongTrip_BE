@@ -3,8 +3,8 @@ server:
 
 spring:
   jpa:
-#    hibernate:
-#      ddl-auto: create
+    hibernate:
+      ddl-auto: validate
     show-sql: true
     open-in-view: true
     properties:
@@ -27,6 +27,11 @@ spring:
             authorization-grant-type: authorization_code
             client-authentication-method: POST
             client-name: Kakao
+          google:
+            client-id: 922580361362-to8no0giot98a10v6je1a0fj2lerh6fv.apps.googleusercontent.com
+            client-secret: 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
+            redirect-uri: "{baseUrl}/{action}/oauth2/code/{registrationId}"
+            scope: profile, email
         provider:
           kakao:
             authorization-uri: https://kauth.kakao.com/oauth/authorize

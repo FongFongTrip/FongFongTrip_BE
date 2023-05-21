@@ -11,9 +11,12 @@ public record BoardResponse(Long id,
                             String content,
                             LocalDateTime created,
                             LocalDateTime lastUpdated,
-                            Boolean isNotice) {
+                            Boolean isNotice,
+                            Boolean isWriter,
+                            Boolean liked,
+                            Boolean marked) {
 
-    public static BoardResponse of(Board board) {
+    public static BoardResponse of(Board board,  Boolean isWriter, Boolean liked, Boolean marked) {
         return BoardResponse.builder()
                 .id(board.getId())
                 .title(board.getTitle())
@@ -21,6 +24,9 @@ public record BoardResponse(Long id,
                 .created(board.getCreated())
                 .lastUpdated(board.getLastUpdated())
                 .isNotice(board.getIsNotice())
+                .isWriter(isWriter)
+                .liked(liked)
+                .marked(marked)
                 .build();
     }
 }

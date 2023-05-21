@@ -12,7 +12,7 @@ public class LoginUserMapper {
 	public LoginUser toLoginUser(Member member) {
         HashMap<String, Object> attributes = new HashMap<>();
         attributes.put("id", member.getId());
-        return new LoginUser(member, attributes, member.getRole());
+        return new LoginUser(member, attributes, member.getAuthorityRole());
     }
 
 }

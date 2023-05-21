@@ -3,10 +3,7 @@ package com.ssafy.fongfongtrip.domain.board.service;
 import com.ssafy.fongfongtrip.domain.board.dto.request.BoardRegisterRequest;
 import com.ssafy.fongfongtrip.domain.board.dto.request.BoardSearchRequest;
 import com.ssafy.fongfongtrip.domain.board.dto.request.BoardUpdateRequest;
-import com.ssafy.fongfongtrip.domain.board.entity.Board;
-import com.ssafy.fongfongtrip.domain.board.entity.BoardLike;
-import com.ssafy.fongfongtrip.domain.board.entity.BoardMark;
-import com.ssafy.fongfongtrip.domain.board.entity.SearchType;
+import com.ssafy.fongfongtrip.domain.board.entity.*;
 import com.ssafy.fongfongtrip.domain.board.repository.BoardLikeRepository;
 import com.ssafy.fongfongtrip.domain.board.repository.BoardMarkRepository;
 import com.ssafy.fongfongtrip.domain.board.repository.BoardRepository;
@@ -33,8 +30,8 @@ public class BoardService {
     private final MemberService memberService;
 
     @Transactional
-    public void save(BoardRegisterRequest boardRegisterRequest, Long memberId) {
-        boardRepository.save(boardRegisterRequest.toBoard(memberService.findById(memberId)));
+    public Board save(BoardRegisterRequest boardRegisterRequest, Long memberId) {
+        return boardRepository.save(boardRegisterRequest.toBoard(memberService.findById(memberId)));
     }
 
     public Page<Board> findPaging(Pageable pageable) {
@@ -64,21 +61,22 @@ public class BoardService {
     }
 
     @Transactional
-    public void boardUpdate(BoardUpdateRequest boardUpdateRequest, Long boardId) {
+    public Board boardUpdate(BoardUpdateRequest boardUpdateRequest, Long boardId) {
         boardRepository.findById(boardId)
                 .ifPresentOrElse(board -> board.updateBoard(boardUpdateRequest.title(), boardUpdateRequest.content(), boardUpdateRequest.isNotice()),
                 () -> { throw new EntityNotFoundException(); });
-
+        return findById(boardId);
     }
 
     public Boolean liked(Long boardId, Long memberId) {
-        return boardLikeRepository.existsByIdBoardIdAndIdMemberId(boardId, memberId);
+        return boardLikeRepository.existsById(new BoardLikeId(findById(boardId), memberService.findById(memberId)));
     }
 
     public Boolean marked(Long boardId, Long memberId) {
-        return boardMarkRepository.existsByIdBoardIdAndIdMemberId(boardId, memberId);
+        return boardMarkRepository.existsById(new BoardMarkId(findById(boardId), memberService.findById(memberId)));
     }
 
+    @Transactional
     public void like(Long boardId, Long memberId) {
         if (liked(boardId, memberId)) {
             return;
@@ -86,10 +84,12 @@ public class BoardService {
         boardLikeRepository.save(new BoardLike(findById(boardId), memberService.findById(memberId)));
     }
 
+    @Transactional
     public void unlike(Long boardId, Long memberId) {
-        boardLikeRepository.deleteByIdBoardIdAndIdMemberId(boardId, memberId);
+        boardLikeRepository.deleteById(new BoardLikeId(findById(boardId), memberService.findById(memberId)));
     }
 
+    @Transactional
     public void mark(Long boardId, Long memberId) {
         if (marked(boardId, memberId)) {
             return;
@@ -97,7 +97,8 @@ public class BoardService {
         boardMarkRepository.save(new BoardMark(findById(boardId), memberService.findById(memberId)));
     }
 
+    @Transactional
     public void unmark(Long boardId, Long memberId) {
-        boardMarkRepository.deleteByIdBoardIdAndIdMemberId(boardId, memberId);
+        boardMarkRepository.deleteById(new BoardMarkId(findById(boardId), memberService.findById(memberId)));
     }
 }

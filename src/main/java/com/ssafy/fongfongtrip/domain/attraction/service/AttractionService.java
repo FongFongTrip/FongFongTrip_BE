@@ -1,9 +1,11 @@
 package com.ssafy.fongfongtrip.domain.attraction.service;
 
 import com.ssafy.fongfongtrip.domain.attraction.dto.request.AttractionInfoRequest;
+import com.ssafy.fongfongtrip.domain.attraction.entity.AttractionDescription;
 import com.ssafy.fongfongtrip.domain.attraction.entity.AttractionInfo;
 import com.ssafy.fongfongtrip.domain.attraction.entity.AttractionLike;
 import com.ssafy.fongfongtrip.domain.attraction.entity.AttractionMark;
+import com.ssafy.fongfongtrip.domain.attraction.repository.AttractionDescriptionRepository;
 import com.ssafy.fongfongtrip.domain.attraction.repository.AttractionInfoRepository;
 import com.ssafy.fongfongtrip.domain.attraction.repository.AttractionLikeRepository;
 import com.ssafy.fongfongtrip.domain.attraction.repository.AttractionMarkRepository;
@@ -26,6 +28,7 @@ import java.util.Optional;
 public class AttractionService {
 
     private final AttractionInfoRepository attractionInfoRepository;
+    private final AttractionDescriptionRepository attractionDescriptionRepository;
     private final AttractionLikeRepository attractionLikeRepository;
     private final AttractionMarkRepository attractionMarkRepository;
     private final MemberService memberService;
@@ -48,8 +51,8 @@ public class AttractionService {
                                                        attractionInfoRequest.gugunCode());
     }
 
-    public AttractionInfo findByContentId(Integer contentId) {
-        return attractionInfoRepository.findByContentId(contentId).orElseThrow(EntityNotFoundException::new);
+    public AttractionDescription findByContentId(Integer contentId) {
+        return attractionDescriptionRepository.findById(contentId).orElseThrow(EntityNotFoundException::new);
     }
 
     public Boolean liked(Integer contentId, Long memberId) {

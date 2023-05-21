@@ -35,13 +35,13 @@ public class MemberController {
     private final LoginUserMapper loginUserMapper;
 
     @GetMapping("/me")
-    public ResponseEntity<MemberResponse> meResponse(@AuthenticationPrincipal LoginUser loginUser) {
-        return ResponseEntity.ok(MemberResponse.of(loginUser.getMember()));
+    public ResponseEntity<SimpleMemberResponse> meResponse(@AuthenticationPrincipal LoginUser loginUser) {
+        return ResponseEntity.ok(SimpleMemberResponse.of(loginUser.getMember()));
     }
 
     @GetMapping("/{memberId}")
-    public ResponseEntity<MemberResponse> memberDetails(@PathVariable Long memberId) {
-        return ResponseEntity.ok(MemberResponse.of(memberService.findById(memberId)));
+    public ResponseEntity<SimpleMemberResponse> memberDetails(@PathVariable Long memberId) {
+        return ResponseEntity.ok(SimpleMemberResponse.of(memberService.findById(memberId)));
     }
 
     @PostMapping
@@ -55,8 +55,8 @@ public class MemberController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<MemberResponse> signup(@RequestBody @Validated MemberRegisterRequest memberRegisterRequest) {
-        return ResponseEntity.ok(MemberResponse.of(memberDetailsService.signup(memberRegisterRequest)));
+    public ResponseEntity<SimpleMemberResponse> signup(@RequestBody @Validated MemberRegisterRequest memberRegisterRequest) {
+        return ResponseEntity.ok(SimpleMemberResponse.of(memberDetailsService.signup(memberRegisterRequest)));
     }
 
     @DeleteMapping("/{id}")

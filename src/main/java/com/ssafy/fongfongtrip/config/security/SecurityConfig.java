@@ -16,6 +16,7 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -44,8 +45,9 @@ public class SecurityConfig {
                         requests ->
                                 requests.requestMatchers(HttpMethod.GET, "/api/v1/members/me").hasRole("USER")
                                         .requestMatchers(HttpMethod.DELETE, "/api/v1/members/*").hasRole("ADMIN")
-                                        .requestMatchers("/auth2/**", "/api/v1/auth", "/api/v1/members/*", "/api/v1/members",
-                                                "/ws", "/topic/**", "/pub/**", "/chat/**").permitAll()
+                                        .requestMatchers("/auth2/**", "/api/v1/auth", "/api/v1/members/**", "/api/v1/members",
+                                                "/ws", "/topic/**", "/pub/**", "/chat/**",
+                                                "/api/v1/attractions", "/api/v1/attractions/contents/**").permitAll()
                                         .requestMatchers("/api/**").hasAnyRole("USER", "ADMIN")
                                         .anyRequest().authenticated())
                 .oauth2Login(setOAuth2Config())

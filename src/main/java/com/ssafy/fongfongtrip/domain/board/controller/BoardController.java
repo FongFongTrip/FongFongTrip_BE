@@ -36,9 +36,7 @@ public class BoardController {
                                                                @AuthenticationPrincipal LoginUser loginUser) {
         Page<Board> paging = boardService.findPaging(pageable);
         return ResponseEntity.ok(paging.stream()
-                .map(board -> SimpleBoardResponse.of(board, isWriter(board, loginUser),
-                        boardService.liked(board.getId(), loginUser.getMember().getId()),
-                        boardService.marked(board.getId(), loginUser.getMember().getId())))
+                .map(SimpleBoardResponse::of)
                 .toList());
     }
 
@@ -48,28 +46,35 @@ public class BoardController {
                                                                 @AuthenticationPrincipal LoginUser loginUser) {
         Page<Board> paging = boardService.findByKeyword(boardSearchRequest, pageable);
         return ResponseEntity.ok(paging.stream()
-                .map(board -> SimpleBoardResponse.of(board, isWriter(board, loginUser),
-                        boardService.liked(board.getId(), loginUser.getMember().getId()),
-                        boardService.marked(board.getId(), loginUser.getMember().getId())))
+                .map(SimpleBoardResponse::of)
                 .toList());
     }
 
     @GetMapping("/{boardId}")
-    public ResponseEntity<BoardResponse> boardDetails(@PathVariable Long boardId) throws EntityNotFoundException {
-        return ResponseEntity.ok(BoardResponse.of(boardService.findById(boardId)));
+    public ResponseEntity<BoardResponse> boardDetails(@PathVariable Long boardId,
+                                                      @AuthenticationPrincipal LoginUser loginUser) throws EntityNotFoundException {
+        Board board = boardService.findById(boardId);
+        return ResponseEntity.ok(BoardResponse.of(board, isWriter(board, loginUser),
+                boardService.liked(board.getId(), loginUser.getMember().getId()),
+                boardService.marked(board.getId(), loginUser.getMember().getId())));
     }
 
     @PostMapping
-    public ResponseEntity<Objects> boardRegistry(@RequestBody @Validated BoardRegisterRequest boardRegisterRequest,
+    public ResponseEntity<BoardResponse> boardRegistry(@RequestBody @Validated BoardRegisterRequest boardRegisterRequest,
                                                  @AuthenticationPrincipal LoginUser loginUser) {
-        boardService.save(boardRegisterRequest, loginUser.getMember().getId());
-        return ResponseEntity.ok().build();
+        Board board = boardService.save(boardRegisterRequest, loginUser.getMember().getId());
+        return ResponseEntity.ok(BoardResponse.of(board, isWriter(board, loginUser),
+                boardService.liked(board.getId(), loginUser.getMember().getId()),
+                boardService.marked(board.getId(), loginUser.getMember().getId())));
     }
 
     @PutMapping("/{boardId}")
-    public ResponseEntity<Objects> boardUpdate(@PathVariable Long boardId, @RequestBody @Validated BoardUpdateRequest boardUpdateRequest) throws EntityNotFoundException {
-        boardService.boardUpdate(boardUpdateRequest, boardId);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<BoardResponse> boardUpdate(@PathVariable Long boardId, @RequestBody @Validated BoardUpdateRequest boardUpdateRequest,
+                                                     @AuthenticationPrincipal LoginUser loginUser) throws EntityNotFoundException {
+        Board board = boardService.boardUpdate(boardUpdateRequest, boardId);
+        return ResponseEntity.ok(BoardResponse.of(board, isWriter(board, loginUser),
+                boardService.liked(board.getId(), loginUser.getMember().getId()),
+                boardService.marked(board.getId(), loginUser.getMember().getId())));
     }
 
     @DeleteMapping("/{boardId}")

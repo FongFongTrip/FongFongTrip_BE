@@ -7,7 +7,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface BoardLikeRepository extends JpaRepository<BoardLike, BoardLikeId> {
-    Boolean existsByIdBoardIdAndIdMemberId(Long boardId, Long memberId);
-
-    void deleteByIdBoardIdAndIdMemberId(Long boardId, Long memberId);
 }

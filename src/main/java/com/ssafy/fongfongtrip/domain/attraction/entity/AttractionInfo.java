@@ -33,7 +33,10 @@ public class AttractionInfo {
     @JoinColumn(name = "gugun_code")
     private Gugun gugun;
 
+    @Column(columnDefinition = "decimal")
     private Double latitude;
+
+    @Column(columnDefinition = "decimal")
     private Double longitude;
 
     private String mlevel;
