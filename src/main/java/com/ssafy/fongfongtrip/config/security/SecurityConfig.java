@@ -43,12 +43,11 @@ public class SecurityConfig {
                 .and()
                 .authorizeHttpRequests(
                         requests ->
-                                requests.requestMatchers(HttpMethod.GET, "/api/v1/members/me").hasRole("USER")
-                                        .requestMatchers(HttpMethod.DELETE, "/api/v1/members/*").hasRole("ADMIN")
+                                requests.requestMatchers(HttpMethod.DELETE, "/api/v1/members/*").hasRole("ADMIN")
                                         .requestMatchers("/auth2/**", "/api/v1/auth", "/api/v1/members/**", "/api/v1/members",
                                                 "/ws", "/topic/**", "/pub/**", "/chat/**",
                                                 "/api/v1/attractions", "/api/v1/attractions/contents/**").permitAll()
-                                        .requestMatchers("/api/**").hasAnyRole("USER", "ADMIN")
+                                        .requestMatchers("/api/**").hasRole("USER")
                                         .anyRequest().authenticated())
                 .oauth2Login(setOAuth2Config())
                 .sessionManagement(config -> config.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

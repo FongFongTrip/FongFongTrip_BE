@@ -101,4 +101,8 @@ public class BoardService {
     public void unmark(Long boardId, Long memberId) {
         boardMarkRepository.deleteById(new BoardMarkId(findById(boardId), memberService.findById(memberId)));
     }
+
+    public long getCount() {
+        return boardRepository.count();
+    }
 }

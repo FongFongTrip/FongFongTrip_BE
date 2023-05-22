@@ -13,13 +13,16 @@ import java.util.Optional;
 
 public interface AttractionInfoRepository extends JpaRepository<AttractionInfo, Integer> {
 
-    @Query(value = "select ai from AttractionInfo ai",
+    @Query(value = "select ai from AttractionInfo ai order by sqrt(power(abs(ai.latitude - :latitude), 2) + power(abs(ai.longitude - :longitude), 2)) ",
             countQuery = "select count(ai) from AttractionInfo ai")
-    Page<AttractionInfo> findPagingAll(Pageable pageable);
+    Page<AttractionInfo> findPagingAll(Pageable pageable, @Param("latitude") Double latitude, @Param("longitude") Double longitude);
 
-    @Query(value = "select ai from AttractionInfo ai where ai.contentTypeId = :contentTypeId",
+    @Query(value = "select ai from AttractionInfo ai where ai.contentTypeId = :contentTypeId order by sqrt(power(abs(ai.latitude - :latitude), 2) + power(abs(ai.longitude - :longitude), 2)) ",
             countQuery = "select count(ai) from AttractionInfo ai")
-    Page<AttractionInfo> findPagingByContentTypeId(Pageable pageable, @Param("contentTypeId") Integer contentTypeId);
+    Page<AttractionInfo> findPagingByContentTypeId(Pageable pageable,
+                                                   @Param("contentTypeId") Integer contentTypeId,
+                                                   @Param("latitude") Double latitude,
+                                                   @Param("longitude") Double longitude);
 
 
     @Query("select ai from AttractionInfo ai " +

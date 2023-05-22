@@ -1,13 +1,10 @@
 package com.ssafy.fongfongtrip.domain.board.controller;
 
 import com.ssafy.fongfongtrip.config.security.LoginUser;
-import com.ssafy.fongfongtrip.domain.attraction.dto.response.AttractionLikeResponse;
-import com.ssafy.fongfongtrip.domain.attraction.dto.response.AttractionMarkResponse;
 import com.ssafy.fongfongtrip.domain.board.dto.request.BoardRegisterRequest;
 import com.ssafy.fongfongtrip.domain.board.dto.request.BoardSearchRequest;
 import com.ssafy.fongfongtrip.domain.board.dto.request.BoardUpdateRequest;
-import com.ssafy.fongfongtrip.domain.board.dto.response.BoardResponse;
-import com.ssafy.fongfongtrip.domain.board.dto.response.SimpleBoardResponse;
+import com.ssafy.fongfongtrip.domain.board.dto.response.*;
 import com.ssafy.fongfongtrip.domain.board.entity.Board;
 import com.ssafy.fongfongtrip.domain.board.service.BoardService;
 import jakarta.persistence.EntityNotFoundException;
@@ -85,31 +82,36 @@ public class BoardController {
     }
 
     @GetMapping("/{boardId}/like")
-    public ResponseEntity<AttractionLikeResponse> like(@PathVariable Long boardId,
-                                                       @AuthenticationPrincipal LoginUser loginUser) {
+    public ResponseEntity<BoardLikeResponse> like(@PathVariable Long boardId,
+                                                  @AuthenticationPrincipal LoginUser loginUser) {
         boardService.like(boardId, loginUser.getMember().getId());
-        return ResponseEntity.ok(new AttractionLikeResponse(true));
+        return ResponseEntity.ok(new BoardLikeResponse(true));
     }
 
     @DeleteMapping("/{boardId}/unlike")
-    public ResponseEntity<AttractionLikeResponse> unlike(@PathVariable Long boardId,
-                                                         @AuthenticationPrincipal LoginUser loginUser) {
+    public ResponseEntity<BoardLikeResponse> unlike(@PathVariable Long boardId,
+                                                    @AuthenticationPrincipal LoginUser loginUser) {
         boardService.unlike(boardId, loginUser.getMember().getId());
-        return ResponseEntity.ok(new AttractionLikeResponse(false));
+        return ResponseEntity.ok(new BoardLikeResponse(false));
     }
 
     @GetMapping("/{boardId}/mark")
-    public ResponseEntity<AttractionMarkResponse> mark(@PathVariable Long boardId,
+    public ResponseEntity<BoardMarkResponse> mark(@PathVariable Long boardId,
                                                        @AuthenticationPrincipal LoginUser loginUser) {
         boardService.mark(boardId, loginUser.getMember().getId());
-        return ResponseEntity.ok(new AttractionMarkResponse(true));
+        return ResponseEntity.ok(new BoardMarkResponse(true));
     }
 
     @DeleteMapping("/{boardId}/unmark")
-    public ResponseEntity<AttractionMarkResponse> unmark(@PathVariable Long boardId,
+    public ResponseEntity<BoardMarkResponse> unmark(@PathVariable Long boardId,
                                                          @AuthenticationPrincipal LoginUser loginUser) {
         boardService.unmark(boardId, loginUser.getMember().getId());
-        return ResponseEntity.ok(new AttractionMarkResponse(false));
+        return ResponseEntity.ok(new BoardMarkResponse(false));
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<BoardTallyResponse> totalCount() {
+        return ResponseEntity.ok(new BoardTallyResponse(boardService.getCount()));
     }
 
     private Boolean isWriter(Board board, LoginUser loginUser) {

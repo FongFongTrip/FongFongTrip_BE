@@ -19,7 +19,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/attractions")
@@ -30,8 +29,9 @@ public class AttractionController {
 
     @GetMapping
     public ResponseEntity<List<AttractionInfoResponse>> attractionListByPaging(@PageableDefault(page = 0, size = 20, sort = "title", direction = Sort.Direction.ASC) Pageable pageable,
+                                                                               @RequestParam Double latitude, @RequestParam Double longitude,
                                                                                @AuthenticationPrincipal LoginUser loginUser) {
-        return ResponseEntity.ok(attractionService.findByPaging(pageable).stream()
+        return ResponseEntity.ok(attractionService.findByPaging(pageable, latitude, longitude).stream()
                 .map(attraction ->
                         AttractionInfoResponse.of(attraction,
                                 getLiked(loginUser, attraction),
@@ -42,8 +42,9 @@ public class AttractionController {
     @GetMapping("/contents/{contentTypeId}")
     public ResponseEntity<List<AttractionInfoResponse>> attractionListPagingByContentTypeId(@PathVariable Integer contentTypeId,
                                                                                             @PageableDefault(page = 0, size = 20, sort = "title", direction = Sort.Direction.ASC) Pageable pageable,
+                                                                                            @RequestParam Double latitude, @RequestParam Double longitude,
                                                                                             @AuthenticationPrincipal LoginUser loginUser) {
-        return ResponseEntity.ok(attractionService.findPagingByContentTypeId(pageable, contentTypeId).stream()
+        return ResponseEntity.ok(attractionService.findPagingByContentTypeId(pageable, contentTypeId, latitude, longitude).stream()
                 .map(attraction ->
                         AttractionInfoResponse.of(attraction,
                                 getLiked(loginUser, attraction),
@@ -53,7 +54,7 @@ public class AttractionController {
 
     @GetMapping("/{contentId}")
     public ResponseEntity<AttractionDescriptionResponse> attractionInfoDetails(@PathVariable Integer contentId,
-                                                                        @AuthenticationPrincipal LoginUser loginUser) {
+                                                                               @AuthenticationPrincipal LoginUser loginUser) {
         AttractionDescription attractionDescription = attractionService.findByContentId(contentId);
         return ResponseEntity.ok(AttractionDescriptionResponse.of(
                 attractionDescription,
