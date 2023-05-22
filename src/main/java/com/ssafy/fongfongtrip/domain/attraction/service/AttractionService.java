@@ -1,6 +1,7 @@
 package com.ssafy.fongfongtrip.domain.attraction.service;
 
 import com.ssafy.fongfongtrip.domain.attraction.dto.request.AttractionInfoRequest;
+import com.ssafy.fongfongtrip.domain.attraction.dto.request.LocationRequest;
 import com.ssafy.fongfongtrip.domain.attraction.entity.AttractionDescription;
 import com.ssafy.fongfongtrip.domain.attraction.entity.AttractionInfo;
 import com.ssafy.fongfongtrip.domain.attraction.entity.AttractionLike;
@@ -9,8 +10,6 @@ import com.ssafy.fongfongtrip.domain.attraction.repository.AttractionDescription
 import com.ssafy.fongfongtrip.domain.attraction.repository.AttractionInfoRepository;
 import com.ssafy.fongfongtrip.domain.attraction.repository.AttractionLikeRepository;
 import com.ssafy.fongfongtrip.domain.attraction.repository.AttractionMarkRepository;
-import com.ssafy.fongfongtrip.domain.member.entity.Member;
-import com.ssafy.fongfongtrip.domain.member.repository.MemberRepository;
 import com.ssafy.fongfongtrip.domain.member.service.MemberService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -46,9 +44,13 @@ public class AttractionService {
     }
 
     public List<AttractionInfo> findAllByCode(AttractionInfoRequest attractionInfoRequest) {
-        return attractionInfoRepository.findByLocation(attractionInfoRequest.contentTypeId(),
+        return attractionInfoRepository.findByTypeAndLocation(attractionInfoRequest.contentTypeId(),
                                                        attractionInfoRequest.sidoCode(),
                                                        attractionInfoRequest.gugunCode());
+    }
+
+    public List<AttractionInfo> findAllByLocation(LocationRequest locationRequest) {
+        return attractionInfoRepository.findByLocation(locationRequest.sidoCode(), locationRequest.gugunCode());
     }
 
     public AttractionDescription findByContentId(Integer contentId) {

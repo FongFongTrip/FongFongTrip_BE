@@ -2,6 +2,7 @@ package com.ssafy.fongfongtrip.domain.attraction.controller;
 
 import com.ssafy.fongfongtrip.config.security.LoginUser;
 import com.ssafy.fongfongtrip.domain.attraction.dto.request.AttractionInfoRequest;
+import com.ssafy.fongfongtrip.domain.attraction.dto.request.LocationRequest;
 import com.ssafy.fongfongtrip.domain.attraction.dto.response.AttractionDescriptionResponse;
 import com.ssafy.fongfongtrip.domain.attraction.dto.response.AttractionInfoResponse;
 import com.ssafy.fongfongtrip.domain.attraction.dto.response.AttractionLikeResponse;
@@ -67,6 +68,17 @@ public class AttractionController {
     public ResponseEntity<List<AttractionInfoResponse>> attractionListByCode(@RequestBody @Validated AttractionInfoRequest attractioninfoRequest,
                                                                              @AuthenticationPrincipal LoginUser loginUser) {
         return ResponseEntity.ok(attractionService.findAllByCode(attractioninfoRequest).stream()
+                .map(attraction ->
+                        AttractionInfoResponse.of(attraction,
+                                getLiked(loginUser, attraction),
+                                getMarked(loginUser, attraction)))
+                .toList());
+    }
+
+    @PostMapping("/location")
+    public ResponseEntity<List<AttractionInfoResponse>> attractionListByPosition(@RequestBody @Validated LocationRequest locationRequest,
+                                                                                 @AuthenticationPrincipal LoginUser loginUser) {
+        return ResponseEntity.ok(attractionService.findAllByLocation(locationRequest).stream()
                 .map(attraction ->
                         AttractionInfoResponse.of(attraction,
                                 getLiked(loginUser, attraction),
