@@ -43,6 +43,10 @@ public class AttractionService {
         return attractionInfoRepository.findPagingByContentTypeId(pageable, contentTypeId, latitude, longitude);
     }
 
+    public Page<AttractionInfo> findPagingByContentTypeIdAndKeyword(Pageable pageable, Integer contentTypeId, String keyword) {
+        return attractionInfoRepository.findPagingByContentTypeIdAndKeyword(pageable, contentTypeId, keyword);
+    }
+
     public List<AttractionInfo> findAllByCode(AttractionInfoRequest attractionInfoRequest) {
         return attractionInfoRepository.findByTypeAndLocation(attractionInfoRequest.contentTypeId(),
                                                        attractionInfoRequest.sidoCode(),

@@ -11,6 +11,7 @@ import com.ssafy.fongfongtrip.domain.attraction.entity.AttractionDescription;
 import com.ssafy.fongfongtrip.domain.attraction.entity.AttractionInfo;
 import com.ssafy.fongfongtrip.domain.attraction.service.AttractionService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/attractions")
 @RequiredArgsConstructor
@@ -46,6 +48,19 @@ public class AttractionController {
                                                                                             @RequestParam Double latitude, @RequestParam Double longitude,
                                                                                             @AuthenticationPrincipal LoginUser loginUser) {
         return ResponseEntity.ok(attractionService.findPagingByContentTypeId(pageable, contentTypeId, latitude, longitude).stream()
+                .map(attraction ->
+                        AttractionInfoResponse.of(attraction,
+                                getLiked(loginUser, attraction),
+                                getMarked(loginUser, attraction)))
+                .toList());
+    }
+
+    @GetMapping("/search/{contentTypeId}")
+    public ResponseEntity<List<AttractionInfoResponse>> attractionListPagingByContentTypeIdAndKeyword(@PathVariable Integer contentTypeId,
+                                                                                            @PageableDefault(page = 0, size = 20, sort = "title", direction = Sort.Direction.ASC) Pageable pageable,
+                                                                                            @RequestParam String keyword,
+                                                                                            @AuthenticationPrincipal LoginUser loginUser) {
+        return ResponseEntity.ok(attractionService.findPagingByContentTypeIdAndKeyword(pageable, contentTypeId, keyword).stream()
                 .map(attraction ->
                         AttractionInfoResponse.of(attraction,
                                 getLiked(loginUser, attraction),
