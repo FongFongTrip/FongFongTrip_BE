@@ -27,10 +27,20 @@ public class AddressController {
                 .toList());
     }
 
+    @GetMapping("/sido/{sidoCode}")
+    public ResponseEntity<SidoResponse> sidoDetail(@PathVariable Integer sidoCode) {
+        return ResponseEntity.ok(SidoResponse.of(addressService.findSidoBySidoCode(sidoCode)));
+    }
+
     @GetMapping("/sido/{sidoCode}/gugun")
     public ResponseEntity<List<GugunResponse>> gugunList(@PathVariable Integer sidoCode) {
         return ResponseEntity.ok(addressService.findGugunBySidoCode(sidoCode).stream()
                 .map(GugunResponse::of)
                 .toList());
+    }
+
+    @GetMapping("/sido/{sidoCode}/gugun/{gugunCode}")
+    public ResponseEntity<GugunResponse> gugunDetail(@PathVariable Integer sidoCode, @PathVariable Integer gugunCode) {
+        return ResponseEntity.ok(GugunResponse.of(addressService.findGugunBySidoCodeAndGugunCode(sidoCode, gugunCode)));
     }
 }

@@ -22,7 +22,15 @@ public class AddressService {
         return sidoRepository.findAll();
     }
 
+    public Sido findSidoBySidoCode(Integer sidoCode) {
+        return sidoRepository.findById(sidoCode).orElseThrow(EntityNotFoundException::new);
+    }
+
     public List<Gugun> findGugunBySidoCode(Integer sidoCode) {
         return gugunRepository.findGugunsBySido(sidoRepository.findById(sidoCode).orElseThrow(EntityNotFoundException::new));
+    }
+
+    public Gugun findGugunBySidoCodeAndGugunCode(Integer sidoCode, Integer gugunCode) {
+        return gugunRepository.findGugunsBySidoSidoCodeAndGugunCode(sidoCode, gugunCode).orElseThrow(EntityNotFoundException::new);
     }
 }
