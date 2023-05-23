@@ -51,6 +51,12 @@ public class ChatRoomController {
         return ResponseEntity.ok().build();
     }
 
+    @DeleteMapping("/admin/{roomId}")
+    public ResponseEntity<Object> deleteByAdmin(@PathVariable Long roomId) {
+        chatRoomService.deleteByAdmin(roomId);
+        return ResponseEntity.ok().build();
+    }
+
     private Boolean isCreator(Long creatorId, LoginUser loginUser) {
         return creatorId.equals(loginUser.getMember().getId());
     }

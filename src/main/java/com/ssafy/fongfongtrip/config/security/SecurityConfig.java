@@ -43,7 +43,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeHttpRequests(
                         requests ->
-                                requests.requestMatchers(HttpMethod.DELETE, "/api/v1/members/*").hasRole("ADMIN")
+                                requests.requestMatchers(HttpMethod.DELETE, "/api/v1/members/*", "api/v1/rooms/admin/**").hasRole("ADMIN")
                                         .requestMatchers("/auth2/**", "/api/v1/auth", "/api/v1/members/**", "/api/v1/members",
                                                 "/ws", "/topic/**", "/pub/**", "/chat/**",
                                                 "/api/v1/attractions", "/api/v1/attractions/contents/**").permitAll()
