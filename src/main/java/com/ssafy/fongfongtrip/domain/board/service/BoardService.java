@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.ssafy.fongfongtrip.domain.board.entity.SearchType.*;
@@ -55,6 +56,10 @@ public class BoardService {
         return boardRepository.findById(boardId).orElseThrow(EntityNotFoundException::new);
     }
 
+    @Transactional
+    public List<Board> findMarkByMemberId(Long memberId){
+        return boardMarkRepository.findMarkByMemberId(memberId);
+    }
     @Transactional
     public void deleteById(Long boardId, Long memberId) {
         boardRepository.deleteBoardByIdAndMemberId(boardId, memberId);
