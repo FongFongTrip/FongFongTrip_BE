@@ -47,6 +47,14 @@ public class BoardController {
                 .toList());
     }
 
+    @GetMapping("/markList")
+    public ResponseEntity<List<SimpleBoardResponse>> markList(@AuthenticationPrincipal LoginUser loginUser) {
+        List<Board> list = boardService.findMarkByMemberId(loginUser.getMember().getId());
+        return ResponseEntity.ok(list.stream()
+                .map(SimpleBoardResponse::of)
+                .toList());
+    }
+
     @GetMapping("/{boardId}")
     public ResponseEntity<BoardResponse> boardDetails(@PathVariable Long boardId,
                                                       @AuthenticationPrincipal LoginUser loginUser) throws EntityNotFoundException {
