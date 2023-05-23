@@ -155,4 +155,13 @@ public class AttractionController {
         }
         return attractionService.marked(attraction.getContentId(), loginUser.getMember().getId());
     }
+
+    @GetMapping("/markList")
+    public ResponseEntity<List<AttractionInfoResponse>> markList(@AuthenticationPrincipal LoginUser loginUser) {
+        return ResponseEntity.ok(attractionService.findMarkByMemberId(loginUser.getMember().getId()).stream()
+                .map(attractionInfo -> AttractionInfoResponse.of(attractionInfo,
+                        getLiked(loginUser, attractionInfo),
+                        getMarked(loginUser, attractionInfo)))
+                .toList());
+    }
 }

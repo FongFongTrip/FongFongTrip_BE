@@ -59,6 +59,10 @@ public class AttractionService {
         return attractionInfoRepository.findByLocation(locationRequest.sidoCode(), locationRequest.gugunCode());
     }
 
+    public List<AttractionInfo> findMarkByMemberId(Long memberId){
+        return attractionMarkRepository.findMarkByMemberId(memberId);
+    }
+
     public AttractionDescription findByContentId(Integer contentId) {
         return attractionDescriptionRepository.findById(contentId).orElseThrow(EntityNotFoundException::new);
     }
