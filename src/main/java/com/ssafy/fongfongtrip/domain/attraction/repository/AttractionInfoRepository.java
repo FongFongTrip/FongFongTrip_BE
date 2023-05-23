@@ -30,6 +30,10 @@ public interface AttractionInfoRepository extends JpaRepository<AttractionInfo, 
                                                    @Param("contentTypeId") Integer contentTypeId,
                                                    @Param("keyword") String keyword);
 
+    @Query(value = "select ai from AttractionInfo ai where ai.title like concat('%', :keyword, '%') ",
+            countQuery = "select count(ai) from AttractionInfo ai")
+    Page<AttractionInfo> findPagingByKeyword(Pageable pageable, @Param("keyword") String keyword);
+
     @Query("select ai from AttractionInfo ai " +
             "where ai.contentTypeId = :contentTypeId " +
             "and ai.sido.sidoCode = :sidoCode " +

@@ -55,6 +55,18 @@ public class AttractionController {
                 .toList());
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<List<AttractionInfoResponse>> attractionListPagingByKeyword(@PageableDefault(page = 0, size = 20, sort = "title", direction = Sort.Direction.ASC) Pageable pageable,
+                                                                                                      @RequestParam String keyword,
+                                                                                                      @AuthenticationPrincipal LoginUser loginUser) {
+        return ResponseEntity.ok(attractionService.findPagingByKeyword(pageable, keyword).stream()
+                .map(attraction ->
+                        AttractionInfoResponse.of(attraction,
+                                getLiked(loginUser, attraction),
+                                getMarked(loginUser, attraction)))
+                .toList());
+    }
+
     @GetMapping("/search/{contentTypeId}")
     public ResponseEntity<List<AttractionInfoResponse>> attractionListPagingByContentTypeIdAndKeyword(@PathVariable Integer contentTypeId,
                                                                                             @PageableDefault(page = 0, size = 20, sort = "title", direction = Sort.Direction.ASC) Pageable pageable,

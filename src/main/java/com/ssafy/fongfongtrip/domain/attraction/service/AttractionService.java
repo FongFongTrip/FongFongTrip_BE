@@ -42,7 +42,9 @@ public class AttractionService {
     public Page<AttractionInfo> findPagingByContentTypeId(Pageable pageable, Integer contentTypeId, Double latitude, Double longitude) {
         return attractionInfoRepository.findPagingByContentTypeId(pageable, contentTypeId, latitude, longitude);
     }
-
+    public Page<AttractionInfo> findPagingByKeyword(Pageable pageable, String keyword) {
+        return attractionInfoRepository.findPagingByKeyword(pageable, keyword);
+    }
     public Page<AttractionInfo> findPagingByContentTypeIdAndKeyword(Pageable pageable, Integer contentTypeId, String keyword) {
         return attractionInfoRepository.findPagingByContentTypeIdAndKeyword(pageable, contentTypeId, keyword);
     }
