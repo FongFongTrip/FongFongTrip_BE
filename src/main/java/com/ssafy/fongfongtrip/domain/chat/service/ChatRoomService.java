@@ -36,4 +36,9 @@ public class ChatRoomService {
     public void deleteRoom(Long roomId, Long memberId) {
         chatRoomRepository.deleteByIdAndMemberId(roomId, memberId);
     }
+
+    @Transactional
+    public void deleteByAdmin(Long roomId) {
+        chatRoomRepository.deleteById(roomId);
+    }
 }
