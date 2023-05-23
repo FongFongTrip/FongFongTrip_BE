@@ -2,7 +2,6 @@ package com.ssafy.fongfongtrip.domain.attraction.repository;
 
 import com.ssafy.fongfongtrip.domain.attraction.entity.AttractionInfo;
 import com.ssafy.fongfongtrip.domain.attraction.entity.AttractionMark;
-import com.ssafy.fongfongtrip.domain.board.entity.Board;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
