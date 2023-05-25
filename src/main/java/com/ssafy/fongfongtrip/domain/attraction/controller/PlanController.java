@@ -8,7 +8,10 @@ import com.ssafy.fongfongtrip.domain.attraction.dto.response.RouteResponse;
 import com.ssafy.fongfongtrip.domain.attraction.entity.Plan;
 import com.ssafy.fongfongtrip.domain.attraction.service.AttractionService;
 import com.ssafy.fongfongtrip.domain.attraction.service.PlanService;
+import com.ssafy.fongfongtrip.domain.member.dto.response.SimpleMemberResponse;
+import com.ssafy.fongfongtrip.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
@@ -23,11 +26,20 @@ import java.util.stream.Collectors;
 public class PlanController {
     private final PlanService planService;
     private final AttractionService attractionService;
+    private final MemberService memberService;
 
     @GetMapping
+    public ResponseEntity<List<PlanResponse>> planList(Pageable pageable,
+                                                       @AuthenticationPrincipal LoginUser loginUser) {
+        return ResponseEntity.ok(planService.findAllPagingPlans(pageable).stream()
+                .map(plan -> new PlanResponse(plan.getId(), getRouteResponses(plan, loginUser.getMember().getId()), SimpleMemberResponse.of(memberService.findById(loginUser.getMember().getId()))))
+                .toList());
+    }
+
+    @GetMapping("/me")
     public ResponseEntity<List<PlanResponse>> planListByMemberId(@AuthenticationPrincipal LoginUser loginUser) {
         return ResponseEntity.ok(planService.findPlansByMemberId(loginUser.getMember().getId()).stream()
-                .map(plan -> new PlanResponse(plan.getId(), getRouteResponses(plan, loginUser.getMember().getId())))
+                .map(plan -> new PlanResponse(plan.getId(), getRouteResponses(plan, loginUser.getMember().getId()), SimpleMemberResponse.of(memberService.findById(loginUser.getMember().getId()))))
                 .toList());
     }
 
@@ -44,7 +56,7 @@ public class PlanController {
                                              @AuthenticationPrincipal LoginUser loginUser) {
         Plan plan = planService.save(planRequest, loginUser.getMember().getId());
 
-        return ResponseEntity.ok(new PlanResponse(plan.getId(), getRouteResponses(plan, loginUser.getMember().getId())));
+        return ResponseEntity.ok(new PlanResponse(plan.getId(), getRouteResponses(plan, loginUser.getMember().getId()), SimpleMemberResponse.of(memberService.findById(loginUser.getMember().getId()))));
     }
 
     @DeleteMapping("/{planId}")
