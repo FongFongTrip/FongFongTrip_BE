@@ -20,7 +20,7 @@ public record ChatResponse(MessageType type,
                 .message(chat.getMessage())
                 .nickname(chat.getMember().getNickname())
                 .created(chat.getCreated())
-                .roomId(chat.getChatRoom().getId())
+                .roomId(chat.getChatRoom())
                 .memberId(chat.getMember().getId())
                 .build();
     }

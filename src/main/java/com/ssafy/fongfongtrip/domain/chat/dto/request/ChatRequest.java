@@ -10,9 +10,8 @@ public record ChatRequest(MessageType type,
                           Long roomId,
                           Long memberId,
                           String nickname) {
-
-    public Chat toChat(ChatRoom chatRoom, Member member) {
-        return new Chat(type, message, chatRoom, member);
+    public Chat toChat(Member member) {
+        return new Chat(type, message, roomId, member);
     }
 
     public ChatRequest entering() {

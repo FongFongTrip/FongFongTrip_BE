@@ -38,6 +38,17 @@ spring:
             token-uri: https://kauth.kakao.com/oauth/token
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
+  data:
+    redis:
+      lettuce:
+        pool:
+          min-idle: 0
+          max-idle: 8
+          max-active: 8
+      host: localhost
+      port: 6379
+  main:
+    allow-bean-definition-overriding: true
 
 jwt:
   access-header: Authorization
@@ -46,6 +57,6 @@ jwt:
 
 client:
   host: localhost
-  url: http://localhost:3000
-#  url: http://70.12.50.219:3000
+#  url: http://localhost:3000
+  url: http://70.12.50.219:3000
   endpoint: /success

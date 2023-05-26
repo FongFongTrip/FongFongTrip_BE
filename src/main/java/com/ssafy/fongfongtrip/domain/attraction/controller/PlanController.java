@@ -29,10 +29,9 @@ public class PlanController {
     private final MemberService memberService;
 
     @GetMapping
-    public ResponseEntity<List<PlanResponse>> planList(Pageable pageable,
-                                                       @AuthenticationPrincipal LoginUser loginUser) {
+    public ResponseEntity<List<PlanResponse>> planList(Pageable pageable) {
         return ResponseEntity.ok(planService.findAllPagingPlans(pageable).stream()
-                .map(plan -> new PlanResponse(plan.getId(), getRouteResponses(plan, loginUser.getMember().getId()), SimpleMemberResponse.of(memberService.findById(loginUser.getMember().getId()))))
+                .map(plan -> new PlanResponse(plan.getId(), getRouteResponses(plan, plan.getMember().getId()), SimpleMemberResponse.of(plan.getMember())))
                 .toList());
     }
 
